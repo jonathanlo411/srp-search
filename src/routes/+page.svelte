@@ -1,2 +1,7 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+
+<div>
+  <h1>Search</h1>
+  <form action="?/search" method='POST'>
+    <button>Search</button>
+  </form>
+</div>
