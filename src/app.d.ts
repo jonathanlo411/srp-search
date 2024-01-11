@@ -13,6 +13,34 @@ declare global {
 		entries: number,
 		pages: number
 	}
+
+	interface TimingResponse {
+		rank: number,
+		date: string,
+		name: string,
+		car: string,
+		input: string | undefined,
+		tyre: string | undefined,
+		s1: string | undefined,
+		s2: string | undefined,
+		s3: string | undefined,
+		s4: string | undefined,
+		time: string,
+	}
+	interface PointsResponse {
+		rank: number,
+		name: string,
+		points: number,
+	}
+	interface OvertakeResponse {
+		rank: number,
+		date: string,
+		name: string,
+		car: string,
+		duration: string,
+		spm: string,
+		score: string,
+	}
 }
 
 export {};

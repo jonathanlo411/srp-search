@@ -21,8 +21,8 @@ export async function srpSearch(
   const res = await rawRes.text()
 
   // Returnning DOM Parser
-  const parser = new DOMParser()
-  return parser.parseFromString(res, 'text/html')
+  const dom = new JSDOM(res)
+  return dom.window.document
 }
 
 export async function getPageCount(
@@ -31,17 +31,10 @@ export async function getPageCount(
   stage: string,
   car: string,
   month: boolean
-): Promise<object | undefined> {
+): Promise<PageCount | undefined> {
   // Fetch query
   const url = `https://hub.shutokorevivalproject.com/${query}?`
   const rawRes = await fetch(url + new URLSearchParams({
-    leaderboard: leaderboard,
-    track: 'shuto_revival_project_beta',
-    stage: stage,
-    car: car,
-    month: (+month).toString()
-  }))
-  console.log(url + new URLSearchParams({
     leaderboard: leaderboard,
     track: 'shuto_revival_project_beta',
     stage: stage,
