@@ -4,29 +4,41 @@ import { parseLeaderboardResponse, parseTimingResponse } from "$lib/server/srpPa
 
 export const actions: Actions = {
   search: async ({ request }) => {
-    // TODO: Parse Client Form
-    const query = 'overtake'
-    const leaderboard = 'Default'
-    const name = 'Jonathan'
-    const stage = 'Bayshore Northbound'
+    
+    // Parse Client Form
+    const formData = await request.formData()
+    const name = String(formData.get('name'))
+    const mode = String(formData.get('mode')) as 'timing' | 'timing/points' | 'overtake'
+    const leaderboard = String(formData.get('leaderboard'))
+    let stage = '';
+    let car = '';
+    let month = false;
+    if (mode === 'timing') {
+      stage = String(formData.get('stage'))
+      car = String(formData.get('car'))
+      month = formData.get('month') === 'false' ? false : true
+    } else if (mode === 'timing/points') {
+      month = formData.get('month') === 'false' ? false : true
+    }
 
     // Begin Serach
     let results: any = []
-    const pageCount = await getPageCount(query, leaderboard, stage, '', false)
+    const pageCount = await getPageCount(mode, leaderboard, stage, car, month)
     if (!pageCount) return
     for (let i = 0; i < pageCount.pages; i ++) {
-      const srpPageData = await srpSearch(query, leaderboard, stage, '', i, false)
-      if (query === 'timing') {
+      const srpPageData = await srpSearch(mode, leaderboard, stage, car, i, month)
+      if (mode === 'timing') {
         let res = parseTimingResponse(stage, srpPageData, name)
         results = results.concat(res)
       } else {
-        let res = parseLeaderboardResponse(query, srpPageData, name)
-        results = res
+        let res = parseLeaderboardResponse(mode, srpPageData, name)
+        results = [res]
         break
       }
     }
     
     // Send results
     console.log(results)
+    return results
   }
 }
