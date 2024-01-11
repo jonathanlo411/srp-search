@@ -8,6 +8,11 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	interface PageCount {
+		entries: number,
+		pages: number
+	}
 }
 
 export {};
