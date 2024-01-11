@@ -1,0 +1,85 @@
+{
+    "timingLeaderboardOpts": {
+        "Default": "Default",
+        "Traffic": "Traffic",
+        "TrafficSlow": "TrafficSlow"
+    },
+    "srpRoutes": {
+        "Bayshore Northbound": "Bayshore Northbound",
+        "Bayshore Southbound": "Bayshore Southbound",
+        "Belt Inner": "Belt Inner",
+        "Belt Outer": "Belt Outer",
+        "C1 Inner": "C1 Inner",
+        "C1 Outer": "C1 Outer",
+        "Mirai Outer": "Mirai Outer",
+        "Shibuya": "Shibuya",
+        "Shinjuku": "Shinjuku",
+        "Yokohane Northbound": "Yokohane Northbound",
+        "Yokohane Southbound": "Yokohane Southbound"
+    },
+    "srpCars": {
+        "fast": {
+            "Show all cars": "",
+            "Honda S2000 Turbo GT1 Amuse (AP1)": "ltkaeri_honda_s2000_gt1_amuse",
+            "Nissan Skyline GT-R R34 V-SPEC Performance": "nissan_skyline_r34_v-specperformance",
+            "Mazda  fini RX-7 FD3S [SPEED FACTORY RGO]": "wm_mazda_rx7_fd_rgo",
+            "Porsche 911 Turbo (930) Blackbird": "wm_porsche_911_930",
+            "Toyota MR2 Shutoko•Spec": "ddm_toyota_mr2_sw20_shuto",
+            "Nissan Skyline HR31 House-Spec": "ddm_nissan_skyline_hr31_house",
+            "Nissan Silvia S15 [SPEED FACTORY RGO]": "wm_nissan_s15",
+            "Mitsubishi Lancer Evolution IX MR VARIS": "yg_mitsubishi_lancer_evolution_9_varis",
+            "RE Amemiya Furinkazan μ FC": "ddm_mazda_fc3s_re",
+            "Ferrari F40 Custom": "slang_ferrari_f40",
+            "Honda Integra Type R (DC2) Turbo": "amy_honda_dc2_turbo",
+            "Honda Civic Type R (EK9) Turbo ver. 2": "amy_honda_ek9_turbo",
+            "Nissan Skyline GT-R R34 Nismo Omori Factory S1": "nissan_skyline_r34_omori_factory_s1",
+            "Toyota Supra MKIV Ridox Body Kit": "sl_toyota_supra_mkiv_ridox",
+            "Nissan Skyline GT-R V-Spec (BCNR33) Wangan Specification": "srp_bcnr33_wangan",
+            "Mitsubishi Lancer Evolution V Wangan Spec": "srp_mitsubishi_evo_5_wangan",
+            "Lamborghini Murciélago LP 640 (Veilside)": "spear_lamborghini_lp640_veilside"
+        },
+        "slow": {
+            "Show all cars": "",
+            "Mazda RX-7 Infini": "ddm_mazda_rx7_infini_fc3s",
+            "Nissan Silvia spec-R Aero": "ddm_nissan_silvia_s15",
+            "Mugen Civic type SS (EK9)": "ddm_mugen_civic_ek9",
+            "Nissan Skyline GT-R R34 Z-Tune": "bksy_nissan_skyline_r34_z_tune",
+            "Honda S2000 (AP1)": "ddm_honda_s2000_ap1",
+            "Nissan Skyline GT-R V•Spec II (R32)": "ddm_nissan_skyline_bnr32",
+            "Honda Civic EK Cup": "amy_ek_cup",
+            "Mitsubishi Lancer Evolution IV GSR": "ddm_mitsubishi_evo_iv_gsr",
+            "Toyota MR2 GT-S": "ddm_toyota_mr2_sw20",
+            "Honda Civic type R (FD2)": "ddm_honda_civic_fd2",
+            "Subaru Impreza 22B STi-Version": "ddm_subaru_22b",
+            "Nissan Silvia S14 Navan": "kire_nissan_s14_navan",
+            "Toyota Sprinter Trueno GT-Apex Kouki Hatchback": "tw_toyota_ae86_gtapex_kouki_hatchback",
+            "Toyota Supra 3.0GT Turbo A": "ddm_toyota_supra_ma70",
+            "Daihatsu Copen Street-Spec": "ddm_daihatsu_copen_street",
+            "C-One Motorsport MR-S": "ddm_toyota_mrs_c_one",
+            "Toyota MR-S Haru•Spec": "ddm_toyota_mrs_haru",
+            "Mazda MX5 Toru Suetsugu": "ai_mazda_mx5_toru",
+            "Mitsubishi Lancer Evolution VIII MR": "p3_mitsubishi_evo8",
+            "ks_toyota_gt86": "ks_toyota_gt86",
+            "ks_nissan_skyline_r34": "ks_nissan_skyline_r34",
+            "ks_mazda_miata": "ks_mazda_miata",
+            "ks_mazda_mx5_nd": "ks_mazda_mx5_nd",
+            "ks_lamborghini_huracan_performante": "ks_lamborghini_huracan_performante",
+            "ks_mazda_rx7_spirit_r": "ks_mazda_rx7_spirit_r",
+            "ks_nissan_gtr": "ks_nissan_gtr",
+            "ks_nissan_370z": "ks_nissan_370z",
+            "ks_toyota_supra_mkiv": "ks_toyota_supra_mkiv",
+            "ks_toyota_ae86_drift": "ks_toyota_ae86_drift",
+            "ks_lamborghini_miura_sv": "ks_lamborghini_miura_sv"
+        }
+    },
+    "pointsLeaderBoardOpts": {
+        "Combine all leaderboards": "",
+        "Default": "Default",
+        "Traffic": "Traffic",
+        "TrafficSlow": "TrafficSlow"
+    },
+    "overtakeLeaderBoardOpts": {
+        "Default/Traffic": "Default",
+        "TrafficSlow": "TrafficSlow"
+    }
+}
