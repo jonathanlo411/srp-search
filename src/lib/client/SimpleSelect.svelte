@@ -5,17 +5,11 @@
     export let options: Record<string, string>;
     export let value: string = '';
 
-    let first = true;
-    const setFalse = () => {first = false}
+    value = Object.entries(options)[0][1]
 </script>
 
 <select name={name} bind:value={value} id={idName} class={className}> 
-    {#each Object.entries(options) as [name, optValue]}
-        <!-- {#if first}
-            <option value={optValue} selected>{name}</option>
-            {setFalse()}
-        {:else} -->
-            <option value={optValue}>{name}</option>
-        <!-- {/if} -->
+    {#each Object.entries(options) as [name, optValue], i}
+        <option value={optValue}>{name}</option>
     {/each }
 </select>

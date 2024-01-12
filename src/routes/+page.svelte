@@ -2,6 +2,7 @@
   import { deserialize } from '$app/forms';
   import SimpleSelect from '$lib/client/SimpleSelect.svelte'
   import selectOptions from '$lib/selectFields.json'
+  import messages from '$lib/loadingMessages.json'
   import Toggle from "svelte-toggle";
   import { onMount } from 'svelte';
 
@@ -17,38 +18,19 @@
   let loadText: HTMLButtonElement;
   let submitBt: HTMLButtonElement;
   let loadSec: HTMLDivElement;
-  const messages = [
-    'Checking tire pressure...',
-    'Refueling pit stop...',
-    'Navigating the track...',
-    'Accelerating down the straightaway...',
-    'Tackling hairpin turns...',
-    'Shifting gears...',
-    'Hitting top speed...',
-    'Dodging obstacles...',
-    'Overtaking competitors...',
-    'Mastering the race line...',
-    'Executing a perfect drift...',
-    'Crossing the finish line...',
-    'Celebrating victory...',
-    'Setting a new lap record...',
-    'Spinning donuts in celebration...',
-    'Unleashing turbo boost...',
-    'Precision steering...',
-    'Adrenaline pumping...',
-    'Racing against the clock...',
-    'Engine roaring...',
-    'Gaining pole position...',
-    'Perfecting the racing line...',
-  ];
+  let loadingTimeout: NodeJS.Timeout;
+  let lastRandomIndex: number | null;
 
   function changeLoadingText() {
-    const randomIndex = Math.floor(Math.random() * messages.length);
+    let randomIndex = Math.floor(Math.random() * messages.length);
+    if (randomIndex === lastRandomIndex) {
+      randomIndex ++
+      lastRandomIndex = randomIndex
+    }
     loadText.textContent = messages[randomIndex];
   }
 
   function toggleLoading() {
-    let loadingTimeout;
     if (loading) {
       submitBt.classList.remove('blocked') // Remove blocked button
       submitBt.disabled = false; // Re-enable button
@@ -73,6 +55,7 @@
 
     // Submitting Form
     try {
+      error = ''
       const formElement = e.target as HTMLFormElement
       const formData = new FormData(formElement)
       const rawRes = await fetch(formElement.action, {
@@ -80,9 +63,14 @@
         body: formData
       })
       results = (deserialize(await rawRes.text()) as any)['data']
-      headers = Object.keys(results[0])
-      error = ''
-    } catch {
+      
+      if (results.length === 0) {
+        error = 'No entries found!'
+      } else {
+        headers = Object.keys(results[0])
+        error = ''
+      }
+    } catch (e) {
       error = 'Something went wrong!'
     }
 
@@ -151,7 +139,7 @@
   </form>
 </div>
 
-{#if results}
+{#if results && results.length !== 0}
 <div id='results'>
   <table>
     <thead>
