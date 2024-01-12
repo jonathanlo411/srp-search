@@ -91,8 +91,8 @@ export function parseTimingResponse(
         raceItem.s1 = tableItems[i + 4].textContent!.slice(1)
         raceItem.s2 = tableItems[i + 5].textContent!.slice(1)
       }
-      if (tableItems[i + 6].textContent) { raceItem.s3 = tableItems[i + 6].textContent!.slice(1)}
-      if (tableItems[i + 7].textContent) { raceItem.s4 = tableItems[i + 7].textContent!.slice(1)}
+      if (!(stage==='Shibuya' || stage==='Shinjuku')) { raceItem.s3 = tableItems[i + 6].textContent!.slice(1)}
+      if (stage === 'Bayshore Northbound') { raceItem.s4 = tableItems[i + 7].textContent!.slice(1)}
       if (tableItems[i + 2].textContent) { raceItem.input = tableItems[i + 2].textContent!}
 
       // Save
