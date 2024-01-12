@@ -33,7 +33,8 @@ export function parseLeaderboardResponse(
 ): PointsResponse | OvertakeResponse | undefined {
   // Loop using specific skips and starts to only search through names
   const tableItems = srpPageData.querySelectorAll('td')
-  for (let i = TABLE_CONFIG[query].start; i < tableItems.length; i += TABLE_CONFIG[query].skip) {
+  const tableSkips = srpPageData.querySelectorAll('th').length
+  for (let i = TABLE_CONFIG[query].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
       // Stopping early on points and overtake leaderboards because name only shows up once
       if (query === 'timing/points') {
@@ -66,9 +67,11 @@ export function parseTimingResponse(
   let timingList: Array<TimingResponse> = []
   const tableItems = srpPageData.querySelectorAll('td')
   const stageSkip: number = (TABLE_CONFIG['timing'].skip as any)[stage];
+  const tableSkips = srpPageData.querySelectorAll('th').length
 
-  for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += stageSkip) {
+  for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
+      console.log('here')
 
       // Init timing resposne
       let raceItem: TimingResponse = {
@@ -85,6 +88,8 @@ export function parseTimingResponse(
         s4: undefined
       }
 
+      console.log(raceItem)
+
       // Add other details if existing
       if (tableItems[i + 3].textContent) {
         raceItem.tyre = tableItems[i + 3].textContent!
@@ -100,4 +105,9 @@ export function parseTimingResponse(
     }
   }
   return timingList
+}
+
+
+function obtainSkips(srpPageData: Document) {
+  console.log(srpPageData.querySelectorAll('th').length)
 }
