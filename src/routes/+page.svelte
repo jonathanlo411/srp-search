@@ -93,47 +93,74 @@
 <div id='search'>
   <h1>Shutoku Revival Project Leaderboard Search</h1>
   <form action="?/search" method='POST' on:submit|preventDefault={handleSubmit}>
-    <span class='input-title'>Name</span>
-    <input name='name' value='Jonathan' type='text' required>
-    <span class='input-title'>Mode</span>
-    <select class='s-select' name='mode' bind:value={mode} required>
-      <option value='timing'>Timing</option>
-      <option value='timing/points'>Points</option>
-      <option value='overtake'>Overtake</option>
-    </select>
+    
+    <div class='side-input-group'>
+      <div class='input-group'>
+        <span class='input-title'>Name</span>
+        <input name='name' placeholder='Ex. Jonathan' type='text' required>
+      </div>
+      <div class='input-group'>
+        <span class='input-title'>Mode</span>
+        <select class='s-select' name='mode' bind:value={mode} required>
+          <option value='timing'>Timing</option>
+          <option value='timing/points'>Points</option>
+          <option value='overtake'>Overtake</option>
+        </select>
+      </div>
+    </div>
 
     <!-- Different options dont exist on the mode -->
     {#if mode === 'timing'}
-      <span class='input-title'>Leaderboard</span>
-      <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['timingLeaderboardOpts']} bind:value={leaderboard} />
-      <span class='input-title'>Route</span>
-      <SimpleSelect className='s-select' name='stage' options={selectOptions['srpRoutes']} />
-      <span class='input-title'>Car</span>
-      <SimpleSelect className='s-select' name='car' options={selectOptions['srpCars'][(leaderboard === 'TrafficSlow') ? 'slow' : 'fast']} />
-      <span class='input-title'>Current Month</span>
-      <input name='month' type='hidden' bind:value={toggled}>
-      <Toggle
-        label=''
-        switchColor="#eee"
-        toggledColor="rgb(163, 90, 132)"
-        untoggledColor="rgb(42, 39, 41)"
-        bind:toggled
-      />
+      <div class='side-input-group'>
+        <div class='input-group'>
+          <span class='input-title'>Leaderboard</span>
+          <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['timingLeaderboardOpts']} bind:value={leaderboard} />
+        </div>
+        <div class='input-group'>
+          <span class='input-title'>Route</span>
+          <SimpleSelect className='s-select' name='stage' options={selectOptions['srpRoutes']} />
+        </div>
+      </div>
+      <div class='side-input-group'>
+        <div class='input-group'>
+          <span class='input-title'>Car</span>
+          <SimpleSelect className='s-select' name='car' options={selectOptions['srpCars'][(leaderboard === 'TrafficSlow') ? 'slow' : 'fast']} />
+        </div>
+        <div class='input-group'>
+          <span class='input-title'>Current Month</span>
+          <input name='month' type='hidden' bind:value={toggled}>
+          <Toggle
+            hideLabel
+            switchColor="#eee"
+            toggledColor="rgb(163, 90, 132)"
+            untoggledColor="rgb(42, 39, 41)"
+            bind:toggled
+          />
+        </div>
+      </div>
     {:else if mode ==='timing/points'}
-      <span class='input-title'>Leaderboard</span>
-      <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['pointsLeaderBoardOpts']} />
-      <span class='input-title'>Current Month</span>
-      <input name='month' type='hidden' bind:value={toggled}>
-      <Toggle
-        label=''
-        switchColor="#eee"
-        toggledColor="rgb(163, 90, 132)"
-        untoggledColor="rgb(42, 39, 41)"
-        bind:toggled
-      />
+      <div class='side-input-group'>
+        <div class='input-group'>
+          <span class='input-title'>Leaderboard</span>
+          <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['pointsLeaderBoardOpts']} />
+        </div>
+        <div class='input-group'>
+          <span class='input-title'>Current Month</span>
+          <input name='month' type='hidden' bind:value={toggled}>
+          <Toggle
+            label=''
+            switchColor="#eee"
+            toggledColor="rgb(163, 90, 132)"
+            untoggledColor="rgb(42, 39, 41)"
+            bind:toggled
+          />
+        </div>
+      </div>
     {:else}
-      <span class='input-title'>Leaderboard</span>
-      <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['overtakeLeaderBoardOpts']} />
+      <div class='input-group'>
+        <span class='input-title'>Leaderboard</span>
+        <SimpleSelect className='s-select' name='leaderboard' options={selectOptions['overtakeLeaderBoardOpts']} />
+      </div>
     {/if}
     <button id='search-bt' type='submit'>Search</button>
   </form>
@@ -183,7 +210,7 @@
     background-color: var(--secondary);
     border: 1px solid var(--border);
     border-radius: 5px;
-    width: 95%;
+    width: min(95%, 1500px);
     margin: 3rem auto;
     padding: 1rem;
   }
@@ -210,18 +237,28 @@
     padding: 0.5rem;
     outline: none;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     border: 1px solid var(--border);
     background-color: var(--primary);
     color: var(--font);
+    transition: 0.3s;
   }
-  form input:hover, :global(.s-select):hover { cursor: pointer; }
+  :global(.s-select):hover { cursor: pointer; }
+  form input:focus, :global(.s-select):focus {
+    border: 1px solid white;
+    box-shadow: 0 0 10px 0 var(--highlight);
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 
   #search-bt {
     background-color: var(--highlight);
     color: var(--font);
     outline: none;
-    border: none;
+    border: 1px solid var(--border);
     border-radius: 5px;
     padding: 0.5rem;
     font-size: 1.2rem;
@@ -253,11 +290,14 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  #loading p { font-size: 1.2rem; }
+  #loading p {
+    font-size: 1.2rem;
+    padding-bottom: 5rem;
+  }
 
   /* Results */
   #results {
-    width: 95%;
+    width: min(95%, 1500px);
     margin: 2rem auto;
     border: 1px solid var(--border);
     border-radius: 5px;
@@ -292,5 +332,20 @@
     width: fit-content;
     margin: auto;
     border-radius: 5px;
+  }
+
+
+  /* Media Queries */
+  @media screen and (min-width: 1080px) {
+    .side-input-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+
+    .input-group {
+      width: 49%;
+      margin: 0.5rem auto;
+    }
   }
 </style>

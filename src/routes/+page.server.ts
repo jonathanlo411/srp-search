@@ -38,7 +38,6 @@ export const actions: Actions = {
     }
     
     // Send results
-    console.log(results)
     return results
   }
 }
