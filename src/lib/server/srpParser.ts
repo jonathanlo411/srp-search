@@ -1,28 +1,13 @@
 
 const TABLE_CONFIG = {
   'timing': {
-    start: 2,
-    skip: {
-      'Bayshore Northbound': 11,
-      'Bayshore Southbound': 10,
-      'Belt Inner': 10,
-      'Belt Outer': 10,
-      'C1 Inner': 10,
-      'C1 Outer': 10,
-      'Mirai Outer': 10,
-      'Shibuya': 9,
-      'Shinjuku': 9,
-      'Yokohane Northbound': 10,
-      'Yokohane Southbound': 10
-    }
+    start: 2
   },
   'timing/points': {
     start: 1,
-    skip: 3,
   },
   'overtake': {
     start: 2,
-    skip: 7,
   }
 }
 
@@ -33,7 +18,8 @@ export function parseLeaderboardResponse(
 ): PointsResponse | OvertakeResponse | undefined {
   // Loop using specific skips and starts to only search through names
   const tableItems = srpPageData.querySelectorAll('td')
-  for (let i = TABLE_CONFIG[query].start; i < tableItems.length; i += TABLE_CONFIG[query].skip) {
+  const tableSkips = srpPageData.querySelectorAll('th').length
+  for (let i = TABLE_CONFIG[query].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
       // Stopping early on points and overtake leaderboards because name only shows up once
       if (query === 'timing/points') {
@@ -58,16 +44,22 @@ export function parseLeaderboardResponse(
 }
 
 export function parseTimingResponse(
-  stage: string,
   srpPageData: Document,
   name: string
 ): Array<TimingResponse> {
   // Skip value can depend on track due to differing # of sectors
   let timingList: Array<TimingResponse> = []
-  const tableItems = srpPageData.querySelectorAll('td')
-  const stageSkip: number = (TABLE_CONFIG['timing'].skip as any)[stage];
+  const tableItems: NodeList = srpPageData.querySelectorAll('td')
+  const tableHeaders: NodeList = srpPageData.querySelectorAll('th')
+  const tableSkips: number = tableHeaders.length
+  let s3Available: boolean = false;
+  let s4Available: boolean = false;
+  tableHeaders.forEach((d) => {
+    if (d.textContent?.includes('S3')) { s3Available = true; }
+    if (d.textContent?.includes('S4')) { s4Available = true; }
+  })
 
-  for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += stageSkip) {
+  for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
 
       // Init timing resposne
@@ -76,7 +68,7 @@ export function parseTimingResponse(
         date: tableItems[i - 1].textContent!,
         name: tableItems[i].textContent!,
         car: tableItems[i + 1].textContent!,
-        time: tableItems[i + stageSkip - 3].textContent!,
+        time: tableItems[i + tableSkips - 3].textContent!,
         input: undefined,
         tyre: undefined,
         s1: undefined,
@@ -91,8 +83,8 @@ export function parseTimingResponse(
         raceItem.s1 = tableItems[i + 4].textContent!.slice(1)
         raceItem.s2 = tableItems[i + 5].textContent!.slice(1)
       }
-      if (!(stage==='Shibuya' || stage==='Shinjuku')) { raceItem.s3 = tableItems[i + 6].textContent!.slice(1)}
-      if (stage === 'Bayshore Northbound') { raceItem.s4 = tableItems[i + 7].textContent!.slice(1)}
+      if (s3Available) { raceItem.s3 = tableItems[i + 6].textContent!.slice(1)}
+      if (s4Available) { raceItem.s4 = tableItems[i + 7].textContent!.slice(1)}
       if (tableItems[i + 2].textContent) { raceItem.input = tableItems[i + 2].textContent!}
 
       // Save
