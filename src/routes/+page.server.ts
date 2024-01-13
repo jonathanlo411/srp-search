@@ -28,11 +28,11 @@ export const actions: Actions = {
     for (let i = 0; i < pageCount.pages; i ++) {
       const srpPageData = await srpSearch(mode, leaderboard, stage, car, i, month)
       if (mode === 'timing') {
-        let res = parseTimingResponse(stage, srpPageData, name)
+        let res = parseTimingResponse(srpPageData, name)
         results = results.concat(res)
       } else {
         let res = parseLeaderboardResponse(mode, srpPageData, name)
-        results = [res]
+        results.push(res)
         break
       }
     }
