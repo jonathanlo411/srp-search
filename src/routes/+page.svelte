@@ -5,6 +5,7 @@
   import messages from '$lib/loadingMessages.json'
   import Toggle from "svelte-toggle";
   import { onMount } from 'svelte';
+  import { setNotification } from '$lib/client/notification';
 
   let mode: string;
   let leaderboard: string;
@@ -13,8 +14,7 @@
     
   let toggled = false;
   let loading = false;
-  let error = '';
-
+  
   let loadText: HTMLButtonElement;
   let submitBt: HTMLButtonElement;
   let loadSec: HTMLDivElement;
@@ -52,26 +52,42 @@
   async function handleSubmit(e: Event) {
     // Enable loading state
     toggleLoading()
-
-    // Submitting Form
+    
     try {
-      error = ''
+      // Validating Form
       const formElement = e.target as HTMLFormElement
       const formData = new FormData(formElement)
+      if (!formData.get('name')) {
+        setNotification("Please fill out 'Name'!", true)
+        toggleLoading()
+        return
+      }
+      if (formData.get('mode') === null) {
+        setNotification("Please select an entry for 'Mode'!", true)
+        toggleLoading()
+        return
+      }
+      if (formData.get('mode') === 'timing' && formData.get('car') === null) {
+        setNotification("Please select an entry for 'Car'!", true)
+        toggleLoading()
+        return
+      }
+
+      // Submitting Form
       const rawRes = await fetch(formElement.action, {
         method: 'POST',
         body: formData
       })
       results = (deserialize(await rawRes.text()) as any)['data']
-      
+
+      // Validating Response
       if (results.length === 0) {
-        error = 'No entries found!'
+        setNotification('No entries found!', false)
       } else {
         headers = Object.keys(results[0])
-        error = ''
       }
     } catch (e) {
-      error = 'Something went wrong!'
+      setNotification('Something went wrong!', true)
     }
 
     // Remove loading state
@@ -97,7 +113,7 @@
     <div class='side-input-group'>
       <div class='input-group'>
         <span class='input-title'>Name</span>
-        <input name='name' placeholder='Ex. Jonathan' type='text' required>
+        <input name='name' placeholder='Ex. Jonathan' type='text'>
       </div>
       <div class='input-group'>
         <span class='input-title'>Mode</span>
@@ -194,11 +210,7 @@
   <p>Revving up engines...</p>
 </div>
 
-{#if error}
-<div id='error'>
-  <p>{error}</p>
-</div>
-{/if}
+<div id='notification'></div>
 
 <style>
 
@@ -323,17 +335,6 @@
   table tbody tr {
     border-bottom: 1px solid var(--border);
   }
-
-  /* Error */
-  #error {
-    background-color: red;
-    padding: 0.5rem;
-    font-size: 1.2rem;
-    width: fit-content;
-    margin: auto;
-    border-radius: 5px;
-  }
-
 
   /* Media Queries */
   @media screen and (min-width: 1080px) {
