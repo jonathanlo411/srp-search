@@ -32,7 +32,9 @@ export const actions: Actions = {
         results = results.concat(res)
       } else {
         let res = parseLeaderboardResponse(mode, srpPageData, name)
-        results.push(res)
+        if (res) {
+          results.push(res)
+        }
         break
       }
     }
