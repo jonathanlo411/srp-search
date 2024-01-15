@@ -6,10 +6,17 @@
   import Toggle from "svelte-toggle";
   import { onMount } from 'svelte';
   import { setNotification } from '$lib/client/notification';
+  import TableRow from './tableRow.svelte';
+  import Modal from 'svelte-simple-modal'
 
-  let mode: string;
+  let mode: 'timing' | 'timing/response' | ' overtake';
+  let submittedMode: string;
   let leaderboard: string;
-  let results: Array<Record<string, number | string>>;
+  let results: Array<
+    TimingResponse |
+    PointsResponse |
+    OvertakeResponse
+  >;
   let headers: Array<string>;
     
   let toggled = false;
@@ -85,6 +92,7 @@
         setNotification('No entries found!', false)
       } else {
         headers = Object.keys(results[0])
+        submittedMode = formData.get('mode') as string
       }
     } catch (e) {
       setNotification('Something went wrong!', true)
@@ -194,11 +202,7 @@
     </thead>
     <tbody>
       {#each results as tableEntry}
-        <tr>
-          {#each Object.values(tableEntry) as value}
-            <td>{(value) ? value : '\n'}</td>
-          {/each}
-        </tr>
+        <Modal><TableRow rowData={tableEntry} mode={submittedMode} /></Modal>
       {/each}
     </tbody>
   </table>
@@ -332,8 +336,12 @@
   table td {
     padding: 0.4rem;
   }
-  table tbody tr {
+  :global(table tbody tr) {
     border-bottom: 1px solid var(--border);
+  }
+  :global(table tbody tr:hover) {
+    cursor: pointer;
+    background-color: var(--primary);
   }
 
   /* Media Queries */
