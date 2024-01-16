@@ -22,6 +22,7 @@
         --highlight: rgb(163, 90, 132);
         --fastest: rgb(174, 62, 201);
         --font-color: white;
+        --subdued: rgb(101, 93, 98);
     }
 
     /* Site wide scrollbars */

@@ -139,7 +139,9 @@
 </svelte:head>
 
 <div id='search'>
-  <h1>Shutoku Revival Project Leaderboard Search</h1>
+  <h1 class='primary'>Shutoko Revival Project Leaderboard Search</h1>
+  <h1 class='secondary'>SRP Leaderboard Search</h1>
+  <p>This is a small webapp used to search the Official Shutoko Revival Project leaderboards. Currently, there is not a method to search by name which this project fulfills. For more information click <a href='/about'>here</a>.</p>
   <form action="?/search" method='POST' on:submit|preventDefault={handleSubmit}>
     
     <div class='side-input-group'>
@@ -275,6 +277,16 @@
     font-size: 2.2rem;
     margin-top: 1.2rem;
   }
+  .secondary {
+    display: none;
+  }
+  #search > p {
+    margin: 1rem 0;
+    font-size: 1rem;
+  }
+  a, a:visited {
+    color: var(--highlight);
+  }
 
   form {
     display: flex;
@@ -394,6 +406,7 @@
 
   /* Media Queries */
   @media screen and (min-width: 1080px) {
+
     .side-input-group {
       display: flex;
       flex-direction: row;
@@ -405,4 +418,14 @@
       margin: 0.5rem auto;
     }
   }
+  @media screen and (max-width: 1080px) {
+    /* Size Rendering */
+    .primary {
+      display: none;
+    }
+    .secondary {
+      display: block;
+    }
+  }
+
 </style>
