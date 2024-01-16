@@ -26,11 +26,14 @@ declare global {
 		s3: string | undefined,
 		s4: string | undefined,
 		time: string,
+		fastest: boolean,
+		sourcePage: string
 	}
 	interface PointsResponse {
 		rank: number,
 		name: string,
 		points: number,
+		sourcePage: string
 	}
 	interface OvertakeResponse {
 		rank: number,
@@ -40,6 +43,7 @@ declare global {
 		duration: string,
 		spm: string,
 		score: string,
+		sourcePage: string
 	}
 }
 

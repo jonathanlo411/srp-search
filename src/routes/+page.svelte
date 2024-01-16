@@ -7,9 +7,10 @@
   import { onMount } from 'svelte';
   import { setNotification } from '$lib/client/notification';
   import TableRow from './tableRow.svelte';
+  // @ts-ignore
   import Modal from 'svelte-simple-modal'
 
-  let mode: 'timing' | 'timing/response' | ' overtake';
+  let mode: 'timing' | 'timing/points' | ' overtake';
   let submittedMode: string;
   let leaderboard: string;
   let results: Array<
@@ -333,7 +334,7 @@
     text-align: left;
   }
   table th,
-  table td {
+  :global(table td) {
     padding: 0.4rem;
   }
   :global(table tbody tr) {

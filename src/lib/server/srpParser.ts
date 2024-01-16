@@ -14,19 +14,22 @@ const TABLE_CONFIG = {
 export function parseLeaderboardResponse(
   query: 'timing/points' | 'overtake',
   srpPageData: Document,
-  name: string
+  name: string,
+  url: string
 ): PointsResponse | OvertakeResponse | undefined {
   // Loop using specific skips and starts to only search through names
   const tableItems = srpPageData.querySelectorAll('td')
   const tableSkips = srpPageData.querySelectorAll('th').length
   for (let i = TABLE_CONFIG[query].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
+
       // Stopping early on points and overtake leaderboards because name only shows up once
       if (query === 'timing/points') {
         return {
           rank: +tableItems[i - 1].textContent!, 
           name: tableItems[i].textContent!,
-          points: +tableItems[i + 1].textContent!
+          points: +tableItems[i + 1].textContent!,
+          sourcePage: url
         }
       } else {
         return {
@@ -36,7 +39,8 @@ export function parseLeaderboardResponse(
           car: tableItems[i + 1].textContent!,
           duration: tableItems[i + 2].textContent!,
           spm: tableItems[i + 3].textContent!,
-          score: tableItems[i + 4].textContent!
+          score: tableItems[i + 4].textContent!,
+          sourcePage: url
         }
       }
     }
@@ -45,7 +49,8 @@ export function parseLeaderboardResponse(
 
 export function parseTimingResponse(
   srpPageData: Document,
-  name: string
+  name: string,
+  url: string
 ): Array<TimingResponse> {
   // Skip value can depend on track due to differing # of sectors
   let timingList: Array<TimingResponse> = []
@@ -69,6 +74,8 @@ export function parseTimingResponse(
         name: tableItems[i].textContent!,
         car: tableItems[i + 1].textContent!,
         time: tableItems[i + tableSkips - 3].textContent!,
+        fastest: (tableItems[i]!.parentNode as Element)?.className === 'text-purple',
+        sourcePage: url,
         input: undefined,
         tyre: undefined,
         s1: undefined,
