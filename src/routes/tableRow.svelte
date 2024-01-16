@@ -1,20 +1,32 @@
 <script lang='ts'>
-    import { getContext } from 'svelte';
-    import Popup from './popup.svelte';
-    const { open } = getContext('simple-modal');
-    function showModal(
-        data: TimingResponse | PointsResponse | OvertakeResponse,
-        mode: 'timing' | 'timing/points' | 'overtake'
-    ) {
-        open(Popup, { rowData: data, mode: mode });
-    }
+  import { getContext } from 'svelte';
+  import Popup from './popup.svelte';
 
-    export let rowData: TimingResponse | PointsResponse | OvertakeResponse;
-    export let mode: 'timing' | 'timing/points' | 'overtake';
+  // Weired bug where types aren't being detected
+  // @ts-ignore
+  const { open } = getContext('simple-modal');
+
+  function showModal(
+      data: TimingResponse | PointsResponse | OvertakeResponse,
+      mode: modeSelect
+  ) {
+      open(Popup, { rowData: data, mode: mode, fastest: fastest, sourcePage: sourcePage });
+  }
+
+  export let rowData: TimingResponse | PointsResponse | OvertakeResponse;
+  export let mode: modeSelect;
+  export let fastest: boolean;
+  export let sourcePage: string;
 </script>
 
-<tr on:click={showModal(rowData, mode)}>
-    {#each Object.values(rowData) as value}
-        <td>{(value) ? value : '\n'}</td>
-    {/each}
+<tr on:click={() => showModal(rowData, mode)} class:fastest={fastest}>
+  {#each Object.values(rowData) as value}
+      <td>{(value) ? value : '\n'}</td>
+  {/each}
 </tr>
+
+<style>
+  .fastest {
+      color: var(--fastest)
+  }
+</style>

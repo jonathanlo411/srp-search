@@ -7,17 +7,21 @@
   import { onMount } from 'svelte';
   import { setNotification } from '$lib/client/notification';
   import TableRow from './tableRow.svelte';
+
+  // Weired bug where types aren't being detected
   // @ts-ignore
   import Modal from 'svelte-simple-modal'
 
-  let mode: 'timing' | 'timing/points' | ' overtake';
-  let submittedMode: string;
+  let mode: modeSelect;
+  let submittedMode: modeSelect;
   let leaderboard: string;
   let results: Array<
     TimingResponse |
     PointsResponse |
     OvertakeResponse
   >;
+  let fastest: Array<boolean>;
+  let sources: Array<string>;
   let headers: Array<string>;
     
   let toggled = false;
@@ -92,8 +96,26 @@
       if (results.length === 0) {
         setNotification('No entries found!', false)
       } else {
+        submittedMode = formData.get('mode') as modeSelect
+        if (submittedMode === 'timing') {
+          // TS can't detect double casting
+          // @ts-ignore
+          fastest = results.map(d => d.fastest)
+        }
+        sources = results.map(d => d.sourcePage)
+
+        // Removing properties to clean up the UI
+        // @ts-ignore
+        results = results.map(d => {
+          // TS can't detect double casting
+          // @ts-ignore
+          const { fastest, sourcePage, ...rest } = d
+          return rest
+        })
+        console.log(fastest)
+        console.log(sources)
+
         headers = Object.keys(results[0])
-        submittedMode = formData.get('mode') as string
       }
     } catch (e) {
       setNotification('Something went wrong!', true)
@@ -202,8 +224,17 @@
       </tr>
     </thead>
     <tbody>
-      {#each results as tableEntry}
-        <Modal><TableRow rowData={tableEntry} mode={submittedMode} /></Modal>
+      {#each results as tableEntry, i}
+        <Modal
+          classContent='modal-content'
+        >
+          <TableRow
+            rowData={tableEntry}
+            mode={submittedMode}
+            fastest={fastest[i]}
+            sourcePage={sources[i]}
+          />
+        </Modal>
       {/each}
     </tbody>
   </table>
@@ -257,7 +288,7 @@
     border-radius: 5px;
     border: 1px solid var(--border);
     background-color: var(--primary);
-    color: var(--font);
+    color: var(--font-color);
     transition: 0.3s;
   }
   :global(.s-select):hover { cursor: pointer; }
@@ -273,7 +304,7 @@
 
   #search-bt {
     background-color: var(--highlight);
-    color: var(--font);
+    color: var(--font-color);
     outline: none;
     border: 1px solid var(--border);
     border-radius: 5px;
@@ -321,19 +352,19 @@
     background-color: var(--secondary);
     overflow-x: auto;
   }
-  table {
+  :global(table) {
     border-collapse: collapse;
     font-size: 1rem;
     width: 100%;
   }
-  table thead tr {
+  :global(table thead tr) {
     background-color: var(--primary);
     color: rgb(101, 93, 98);
     font-weight: bold;
     font-size: 0.7rem;
     text-align: left;
   }
-  table th,
+  :global(table th),
   :global(table td) {
     padding: 0.4rem;
   }
@@ -343,6 +374,14 @@
   :global(table tbody tr:hover) {
     cursor: pointer;
     background-color: var(--primary);
+  }
+
+  /* Modal */
+  :global(.modal-content) {
+    background-color: var(--secondary);
+    border-radius: 5px;
+    border: var(--border);
+    overflow-x: hidden !important;
   }
 
   /* Media Queries */

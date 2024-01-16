@@ -45,6 +45,8 @@ declare global {
 		score: string,
 		sourcePage: string
 	}
+
+	type modeSelect = 'timing' | 'timing/points' | ' overtake';
 }
 
 export {};

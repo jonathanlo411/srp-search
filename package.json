@@ -10,6 +10,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
+		"@iconify-json/mdi": "^1.1.64",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
@@ -21,6 +22,7 @@
 		"svelte-toggle": "^4.0.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
+		"unplugin-icons": "^0.18.2",
 		"vite": "^5.0.3"
 	},
 	"type": "module",
