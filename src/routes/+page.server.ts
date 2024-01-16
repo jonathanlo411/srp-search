@@ -3,7 +3,7 @@ import { srpSearch, getPageCount } from "$lib/server/srpSearch";
 import { parseLeaderboardResponse, parseTimingResponse } from "$lib/server/srpParser";
 
 export const actions: Actions = {
-  search: async ({ request }) => {
+  search: async ({ request }) => {    
     
     // Parse Client Form
     const formData = await request.formData()
@@ -28,14 +28,21 @@ export const actions: Actions = {
     for (let i = 0; i < pageCount.pages; i ++) {
       const srpPageData = await srpSearch(mode, leaderboard, stage, car, i, month)
       if (mode === 'timing') {
-        let res = parseTimingResponse(srpPageData, name)
+        let res = parseTimingResponse(
+          srpPageData.pageData as Document,
+          name, srpPageData.url as string
+        )
         results = results.concat(res)
       } else {
-        let res = parseLeaderboardResponse(mode, srpPageData, name)
+        let res = parseLeaderboardResponse(
+          mode,
+          srpPageData.pageData as Document,
+          name, srpPageData.url as string
+        )
         if (res) {
           results.push(res)
+          break
         }
-        break
       }
     }
     

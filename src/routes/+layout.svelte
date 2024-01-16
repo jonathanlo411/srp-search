@@ -23,4 +23,25 @@
         --fastest: rgb(174, 62, 201);
         --font-color: white;
     }
+
+    /* Site wide scrollbars */
+    :global(::-webkit-scrollbar) {
+        height: 0.3rem;
+        width: 0.3rem;
+    }
+    :global(::-webkit-scrollbar-track) {
+        background: none;
+    }
+
+    /* Handle */
+    :global(::-webkit-scrollbar-thumb) {
+        border-radius: 100px;
+        background-color: #ccc;
+        transition: 0.2s;
+    }
+
+    /* Handle on hover */
+    :global(::-webkit-scrollbar-thumb:hover) {
+        background: #b4b4b4;
+    }
 </style>

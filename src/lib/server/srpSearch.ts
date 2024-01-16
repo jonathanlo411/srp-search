@@ -7,22 +7,26 @@ export async function srpSearch(
   car: string,
   page: number,
   month: boolean
-): Promise<Document> {
+): Promise<Record<string, Document | string>> {
   // Fetch query
   const url = `https://hub.shutokorevivalproject.com/${query}?`
-  const rawRes = await fetch(url + new URLSearchParams({
+  const combinedURL = url + new URLSearchParams({
     leaderboard: leaderboard,
     track: 'shuto_revival_project_beta',
     stage: stage,
     car: car,
-    page: page.toString(),
-    month: (+month).toString()
-  }))
+    month: (+month).toString(),
+    page: page.toString()
+  })
+  const rawRes = await fetch(combinedURL)
   const res = await rawRes.text()
 
   // Returnning DOM Parser
   const dom = new JSDOM(res)
-  return dom.window.document
+  return {
+    pageData: dom.window.document,
+    url: combinedURL
+  }
 }
 
 export async function getPageCount(
@@ -34,13 +38,14 @@ export async function getPageCount(
 ): Promise<PageCount | undefined> {
   // Fetch query
   const url = `https://hub.shutokorevivalproject.com/${query}?`
-  const rawRes = await fetch(url + new URLSearchParams({
+  const combinedURL = url + new URLSearchParams({
     leaderboard: leaderboard,
     track: 'shuto_revival_project_beta',
     stage: stage,
     car: car,
     month: (+month).toString()
-  }))
+  })
+  const rawRes = await fetch(combinedURL)
   const res = await rawRes.text()
 
   // Seraching for total entries
