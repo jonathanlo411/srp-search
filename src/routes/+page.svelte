@@ -13,7 +13,6 @@
   import Modal from 'svelte-simple-modal'
 
   let mode: modeSelect;
-  let submittedMode: modeSelect;
   let leaderboard: string;
   let results: Array<
     TimingResponse |
@@ -96,8 +95,7 @@
       if (results.length === 0) {
         setNotification('No entries found!', false)
       } else {
-        submittedMode = formData.get('mode') as modeSelect
-        if (submittedMode === 'timing') {
+        if (formData.get('mode') === 'timing') {
           // TS can't detect double casting
           // @ts-ignore
           fastest = results.map(d => d.fastest)
@@ -112,8 +110,6 @@
           const { fastest, sourcePage, ...rest } = d
           return rest
         })
-        console.log(fastest)
-        console.log(sources)
 
         headers = Object.keys(results[0])
       }
@@ -230,7 +226,6 @@
         >
           <TableRow
             rowData={tableEntry}
-            mode={submittedMode}
             fastest={fastest[i]}
             sourcePage={sources[i]}
           />

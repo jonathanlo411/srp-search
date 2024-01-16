@@ -8,18 +8,16 @@
 
   function showModal(
       data: TimingResponse | PointsResponse | OvertakeResponse,
-      mode: modeSelect
   ) {
-      open(Popup, { rowData: data, mode: mode, fastest: fastest, sourcePage: sourcePage });
+      open(Popup, { rowData: data, fastest: fastest, sourcePage: sourcePage });
   }
 
   export let rowData: TimingResponse | PointsResponse | OvertakeResponse;
-  export let mode: modeSelect;
   export let fastest: boolean;
   export let sourcePage: string;
 </script>
 
-<tr on:click={() => showModal(rowData, mode)} class:fastest={fastest}>
+<tr on:click={() => showModal(rowData)} class:fastest={fastest}>
   {#each Object.values(rowData) as value}
       <td>{(value) ? value : '\n'}</td>
   {/each}

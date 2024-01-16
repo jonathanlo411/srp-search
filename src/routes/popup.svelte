@@ -3,14 +3,34 @@
   export let sourcePage: string;
   export let fastest: string;
 
+  // Types bug in unplugin icons
+  // @ts-ignore
   import CopyIcon from 'virtual:icons/mdi/content-copy';
+  // @ts-ignore
+  import CheckIcon from 'virtual:icons/mdi/check';
+  // @ts-ignore
   import OpenNewIcon from 'virtual:icons/mdi/open-in-new';
 
-  async function copyClipboard(text: string, node: HTMLElement) {
+  async function copyClipboard(event: MouseEvent) {
+    const button = event.currentTarget as HTMLButtonElement;
+    const text = button.parentElement?.textContent;
+
     try {
-      await navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(text!)
+      toggleIcons(button)
+      setTimeout(() => toggleIcons(button), 3000)
     } catch (e) {
       console.log(e)
+    }
+  }
+
+  function toggleIcons(button: HTMLButtonElement) {
+    const copyIcon = button.querySelector('.copy-icon');
+    const checkIcon = button.querySelector('.check-icon');
+
+    if (copyIcon && checkIcon) {
+      copyIcon.classList.toggle('hidden');
+      checkIcon.classList.toggle('hidden');
     }
   }
 </script>
@@ -27,12 +47,12 @@
     <tbody>
       {#each Object.entries(rowData) as [key, value]}
       <tr>
-        <td class='key'>{key.toUpperCase()}</td>
+        <td class='key'>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
         <td class='value'>{value}</td>
       </tr>
       {/each}
       <tr>
-        <td class='key'>FASTEST</td>
+        <td class='key'>Fastest</td>
         <td class='value'>{(fastest) ? 'Yes' : 'No'}</td>
       </tr>
     </tbody>
@@ -49,7 +69,13 @@
         </div>
       </a>
     </div>
-    <p>{sourcePage}<button><CopyIcon /></button></p>
+    <p>
+      {sourcePage}
+      <button on:click={copyClipboard}>
+        <CopyIcon class='copy-icon' />
+        <CheckIcon class='check-icon hidden' />
+      </button>
+    </p>
   </div>
   <div class='metadata-sec'>
     <div class='metadata-head'>
@@ -61,7 +87,13 @@
         </div>
       </a>
     </div>
-    <p>{sourcePage}<button><CopyIcon /></button></p>
+    <p>
+      {sourcePage}
+      <button on:click={copyClipboard}>
+        <CopyIcon class='copy-icon' />
+        <CheckIcon class='check-icon hidden' />
+      </button>
+    </p>
   </div>
 </div>
 
@@ -143,5 +175,8 @@
   .metadata-sec > p button:hover {
     cursor: pointer;
     background-color: var(--primary);
+  }
+  :global(.hidden) {
+    display: none !important;
   }
 </style>
