@@ -21,7 +21,9 @@
   >;
   let fastest: Array<boolean>;
   let sources: Array<string>;
+  let runLinks: Array<string>;
   let headers: Array<string>;
+  let submittedMode: modeSelect;
     
   let toggled = false;
   let loading = false;
@@ -95,10 +97,13 @@
       if (results.length === 0) {
         setNotification('No entries found!', false)
       } else {
-        if (formData.get('mode') === 'timing') {
+        submittedMode = formData.get('mode') as modeSelect
+        if (submittedMode === 'timing') {
           // TS can't detect double casting
           // @ts-ignore
           fastest = results.map(d => d.fastest)
+          // @ts-ignore
+          runLinks = results.map(d => d.runLink)
         }
         sources = results.map(d => d.sourcePage)
 
@@ -107,7 +112,7 @@
         results = results.map(d => {
           // TS can't detect double casting
           // @ts-ignore
-          const { fastest, sourcePage, ...rest } = d
+          const { fastest, sourcePage, runLink, ...rest } = d
           return rest
         })
 
@@ -224,11 +229,19 @@
         <Modal
           classContent='modal-content'
         >
+        {#if submittedMode === 'timing'}
           <TableRow
             rowData={tableEntry}
             fastest={fastest[i]}
+            runLink={runLinks[i]}
             sourcePage={sources[i]}
           />
+          {:else}
+          <TableRow
+            rowData={tableEntry}
+            sourcePage={sources[i]}
+          />
+          {/if}
         </Modal>
       {/each}
     </tbody>

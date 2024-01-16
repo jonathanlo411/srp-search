@@ -9,12 +9,18 @@
   function showModal(
       data: TimingResponse | PointsResponse | OvertakeResponse,
   ) {
-      open(Popup, { rowData: data, fastest: fastest, sourcePage: sourcePage });
+      open(Popup, { 
+        rowData: data,
+        fastest: fastest,
+        sourcePage: sourcePage,
+        runLink: runLink
+      });
   }
 
   export let rowData: TimingResponse | PointsResponse | OvertakeResponse;
-  export let fastest: boolean;
   export let sourcePage: string;
+  export let fastest: boolean = false;
+  export let runLink: string = '';
 </script>
 
 <tr on:click={() => showModal(rowData)} class:fastest={fastest}>

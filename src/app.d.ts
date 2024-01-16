@@ -27,7 +27,8 @@ declare global {
 		s4: string | undefined,
 		time: string,
 		fastest: boolean,
-		sourcePage: string
+		sourcePage: string,
+		runLink: string,
 	}
 	interface PointsResponse {
 		rank: number,

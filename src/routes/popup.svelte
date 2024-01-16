@@ -2,6 +2,7 @@
   export let rowData: any;
   export let sourcePage: string;
   export let fastest: string;
+  export let runLink: string;
 
   // Types bug in unplugin icons
   // @ts-ignore
@@ -48,7 +49,7 @@
       {#each Object.entries(rowData) as [key, value]}
       <tr>
         <td class='key'>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
-        <td class='value'>{value}</td>
+        <td class='value'>{(value) ? value : '\n'}</td>
       </tr>
       {/each}
       <tr>
@@ -77,10 +78,11 @@
       </button>
     </p>
   </div>
+  {#if runLink}
   <div class='metadata-sec'>
     <div class='metadata-head'>
       <h3>Run Link</h3>
-      <a href={sourcePage} target="_blank" rel="norefferer">
+      <a href={runLink} target="_blank" rel="norefferer">
         <div class='text-icon-wrap'>
           <p>Navigate</p>
           <OpenNewIcon />
@@ -88,13 +90,14 @@
       </a>
     </div>
     <p>
-      {sourcePage}
+      {runLink}
       <button on:click={copyClipboard}>
         <CopyIcon class='copy-icon' />
         <CheckIcon class='check-icon hidden' />
       </button>
     </p>
   </div>
+  {/if}
 </div>
 
 

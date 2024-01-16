@@ -66,6 +66,8 @@ export function parseTimingResponse(
 
   for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += tableSkips) {
     if (tableItems[i].textContent?.includes(name)) {
+      let regex = /(\/timing\/lap\?id=\d+)/;
+      const match = (tableItems[i]!.parentNode as Element).getAttribute('onclick')?.match(regex)
 
       // Init timing resposne
       let raceItem: TimingResponse = {
@@ -76,6 +78,7 @@ export function parseTimingResponse(
         time: tableItems[i + tableSkips - 3].textContent!,
         fastest: (tableItems[i]!.parentNode as Element)?.className === 'text-purple',
         sourcePage: url,
+        runLink: match ? `https://hub.shutokorevivalproject.com${match[1]}` : 'NOT FOUND',
         input: undefined,
         tyre: undefined,
         s1: undefined,
