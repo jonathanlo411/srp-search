@@ -100,6 +100,7 @@
       sources = []
       runLinks = []
       results = []
+      headers = []
 
       // Reading and Validating Response
       while (true) {

@@ -15,11 +15,11 @@ export async function GET({ url }) {
   // Parse URL params
   name = url.searchParams.get('name') ?? name
   mode = url.searchParams.get('mode') as modeSelect ?? mode
+  leaderboard = url.searchParams.get('leaderboard') ?? leaderboard
   if (mode === 'timing') {
     stage = url.searchParams.get('stage') ?? 'Bayshore Northbound'
     car = url.searchParams.get('car') ?? car
     month = url.searchParams.get('month') === 'false' ? false : true
-    leaderboard = url.searchParams.get('leaderboard') ?? leaderboard
   } else if (mode === 'timing/points') {
     month = url.searchParams.get('month') === 'false' ? false : true
     leaderboard = url.searchParams.get('leaderboard') ?? ''
