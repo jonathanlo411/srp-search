@@ -14,7 +14,7 @@ declare global {
 		pages: number
 	}
 
-	interface TimingResponse {
+	interface TimingResponse extends Object {
 		rank: number,
 		date: string,
 		name: string,
@@ -30,13 +30,13 @@ declare global {
 		sourcePage: string,
 		runLink: string,
 	}
-	interface PointsResponse {
+	interface PointsResponse extends Object {
 		rank: number,
 		name: string,
 		points: number,
 		sourcePage: string
 	}
-	interface OvertakeResponse {
+	interface OvertakeResponse extends Object {
 		rank: number,
 		date: string,
 		name: string,
@@ -47,7 +47,7 @@ declare global {
 		sourcePage: string
 	}
 
-	type modeSelect = 'timing' | 'timing/points' | ' overtake';
+	type modeSelect = 'timing' | 'timing/points' | 'overtake';
 }
 
 export {};

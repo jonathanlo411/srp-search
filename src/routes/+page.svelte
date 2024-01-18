@@ -18,10 +18,10 @@
     TimingResponse |
     PointsResponse |
     OvertakeResponse
-  >;
-  let fastest: Array<boolean>;
-  let sources: Array<string>;
-  let runLinks: Array<string>;
+  > = [];
+  let fastest: Array<boolean> = [];
+  let sources: Array<string> = [];
+  let runLinks: Array<string> = [];
   let headers: Array<string>;
   let submittedMode: modeSelect;
     
@@ -70,6 +70,7 @@
       // Validating Form
       const formElement = e.target as HTMLFormElement
       const formData = new FormData(formElement)
+      submittedMode = formData.get('mode') as modeSelect
       if (!formData.get('name')) {
         setNotification("Please fill out 'Name'!", true)
         toggleLoading()
@@ -87,37 +88,56 @@
       }
 
       // Submitting Form
-      const rawRes = await fetch(formElement.action, {
-        method: 'POST',
-        body: formData
+      // @ts-ignore
+      const endpoint = '/api/search?' + new URLSearchParams(formData)
+      const response = await fetch(endpoint, {
+        method: 'GET'
       })
-      results = (deserialize(await rawRes.text()) as any)['data']
+      const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
 
-      // Validating Response
-      if (results.length === 0) {
-        setNotification('No entries found!', false)
-      } else {
-        submittedMode = formData.get('mode') as modeSelect
+      // Clear old state
+      fastest = []
+      sources = []
+      runLinks = []
+      results = []
+
+      // Reading and Validating Response
+      while (true) {
+
+        // Await Reader
+        const { value, done } = await reader.read();
+        if (done) break;
+        let newData: Array<TimingResponse | PointsResponse | OvertakeResponse> = JSON.parse(value)
+
         if (submittedMode === 'timing') {
           // TS can't detect double casting
           // @ts-ignore
-          fastest = results.map(d => d.fastest)
+          fastest = fastest.concat(newData.map(d => d.fastest))
           // @ts-ignore
-          runLinks = results.map(d => d.runLink)
+          runLinks = runLinks.concat(newData.map(d => d.runLink))
         }
-        sources = results.map(d => d.sourcePage)
+        sources = sources.concat(newData.map(d => d.sourcePage))
 
         // Removing properties to clean up the UI
         // @ts-ignore
-        results = results.map(d => {
+        newData = newData.map(d => {
           // TS can't detect double casting
           // @ts-ignore
           const { fastest, sourcePage, runLink, ...rest } = d
           return rest
         })
 
-        headers = Object.keys(results[0])
+        if (newData && newData.length !== 0) {
+          const newHeaders =  Object.keys(newData[0])
+          headers = (!headers || newHeaders.length > headers.length) ? newHeaders : headers
+        }
+        results = results.concat(newData)
+      }  
+
+      if (results.length === 0) {
+        setNotification('No entries found!', false)
       }
+
     } catch (e) {
       setNotification('Something went wrong!', true)
     }
@@ -142,7 +162,7 @@
   <h1 class='primary'>Shutoko Revival Project Leaderboard Search</h1>
   <h1 class='secondary'>SRP Leaderboard Search</h1>
   <p>This is a small webapp used to search the Official Shutoko Revival Project leaderboards. Currently, there is not a method to search by name which this project fulfills. For more information click <a href='/about'>here</a>.</p>
-  <form action="?/search" method='POST' on:submit|preventDefault={handleSubmit}>
+  <form action="/api/search" method='GET' on:submit|preventDefault={handleSubmit}>
     
     <div class='side-input-group'>
       <div class='input-group'>
