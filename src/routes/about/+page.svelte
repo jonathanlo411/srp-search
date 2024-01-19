@@ -79,4 +79,16 @@
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
+  
+
+  /* Conditional Rendering */
+  @media screen and (max-width: 1080px) {
+    /* Size Rendering */
+    .primary {
+      display: none !important;
+    }
+    .secondary {
+      display: flex !important;
+    }
+  }
 </style>
