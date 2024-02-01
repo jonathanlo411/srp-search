@@ -1,6 +1,10 @@
 import { srpSearch, getPageCount } from '$lib/server/srpSearch.js';
 import { parseTimingResponse, parseLeaderboardResponse } from '$lib/server/srpParser.js';
-import { json } from '@sveltejs/kit';
+import { json, type Config } from '@sveltejs/kit';
+
+export const config: Config = {
+  runtime: 'edge'
+}
 
 export async function GET({ url }) {
 
@@ -44,7 +48,7 @@ export async function GET({ url }) {
         const srpPageData = await srpSearch(mode, leaderboard, stage, car, i, month)
         if (mode === 'timing') {
           let res = parseTimingResponse(
-            srpPageData.pageData as Document,
+            srpPageData.pageData as string,
             name,
             srpPageData.url as string
           )
@@ -52,7 +56,7 @@ export async function GET({ url }) {
         } else {
           let res = parseLeaderboardResponse(
             mode,
-            srpPageData.pageData as Document,
+            srpPageData.pageData as string,
             name,
             srpPageData.url as string
           )

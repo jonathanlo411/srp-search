@@ -1,4 +1,3 @@
-import { JSDOM } from 'jsdom'
 
 export async function srpSearch(
   query: 'timing' | 'timing/points' | 'overtake',
@@ -7,7 +6,7 @@ export async function srpSearch(
   car: string,
   page: number,
   month: boolean
-): Promise<Record<string, Document | string>> {
+): Promise<Record<string, string>> {
   // Fetch query
   const url = `https://hub.shutokorevivalproject.com/${query}?`
   const combinedURL = url + new URLSearchParams({
@@ -22,9 +21,8 @@ export async function srpSearch(
   const res = await rawRes.text()
 
   // Returnning DOM Parser
-  const dom = new JSDOM(res)
   return {
-    pageData: dom.window.document,
+    pageData: res,
     url: combinedURL
   }
 }
@@ -49,15 +47,10 @@ export async function getPageCount(
   const res = await rawRes.text()
 
   // Seraching for total entries
-  const dom = new JSDOM(res)
-  const doc = dom.window.document
-  const entriesText = doc.querySelector('div.card-footer p.text-muted')
-  if (entriesText && entriesText.textContent) {
-    const totalCountMatch = entriesText.textContent.match(/Showing \d+ - \d+ of (\d+) entries/);
-    const totalCount = parseInt(totalCountMatch![1], 10);
-    return {
-      entries: totalCount,
-      pages: Math.ceil(totalCount/25)
-    }
+  const totalCountMatch = res.match(/Showing \d+ - \d+ of (\d+) entries/);
+  const totalCount = parseInt(totalCountMatch![1], 10);
+  return {
+    entries: totalCount,
+    pages: Math.ceil(totalCount/25)
   }
 }
