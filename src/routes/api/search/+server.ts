@@ -1,6 +1,10 @@
 import { srpSearch, getPageCount } from '$lib/server/srpSearch.js';
 import { parseTimingResponse, parseLeaderboardResponse } from '$lib/server/srpParser.js';
-import { json } from '@sveltejs/kit';
+import { json, type Config } from '@sveltejs/kit';
+
+export const config: Config = {
+  runtime: 'edge'
+}
 
 export async function GET({ url }) {
 
