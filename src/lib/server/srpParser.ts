@@ -56,12 +56,11 @@ export function parseTimingResponse(
   url: string
 ): Array<TimingResponse> {
   // Skip value can depend on track due to differing # of sectors
-  const tableRegex: RegExp = /<td\b[^>]*>([\s\S]*?)<\/td>/g;
+  const tableRegex: RegExp = /<tr\b[^>]*>([\s\S]*?)<\/tr>/g;
   const tableRegexHeaders: RegExp = /<th\b[^>]*>([\s\S]*?)<\/th>/g;
-  let tableItems: Array<string> = [];
+  let tableItems = srpPageData.match(tableRegex)!;
   let tableHeaders: Array<string> = [];
   let match;
-  while (match = tableRegex.exec(srpPageData)) { tableItems.push(match[1]) }
   while (match = tableRegexHeaders.exec(srpPageData)) { tableHeaders.push(match[1]) }
   const tableSkips = tableHeaders.length
 
@@ -73,23 +72,32 @@ export function parseTimingResponse(
     if (d.includes('S4')) { s4Available = true; }
   })
 
-  console.log(tableItems)
-  for (let i = TABLE_CONFIG['timing'].start; i < tableItems.length; i += tableSkips) {
-    // console.log(tableItems[i])
-    if (tableItems[i].includes(name)) {
-      let regex = /(\/timing\/lap\?id=\d+)/;
-      const match = (tableItems[i]!.parentNode as Element).getAttribute('onclick')?.match(regex)
+  // Going row by row
+  const lapIDRegEx: RegExp = /lap\?id=(\d+)/;
+  const fastestRegEx: RegExp = /class="([^"]*\btext-purple\b[^"]*)"/;
+  const itemsRegEx: RegExp = /<td\b[^>]*>([\s\S]*?)<\/td>/g;
+  for (let i = 1; i < tableItems.length; i ++) {
+    const rowData = tableItems[i]
+
+    let rowItems = [];
+    while (match = itemsRegEx.exec(rowData)) { rowItems.push(match[1]) }
+    const namePos = TABLE_CONFIG['timing'].start
+    if (rowItems[namePos].includes(name)) {
+
+      // Regex matching the tr item for lap details
+      const lapID = rowData.match(lapIDRegEx)
+      const fastest = fastestRegEx.test(rowData)
 
       // Init timing resposne
       let raceItem: TimingResponse = {
-        rank: +tableItems[i - 2],
-        date: tableItems[i - 1],
-        name: tableItems[i],
-        car: tableItems[i + 1],
-        time: tableItems[i + tableSkips - 3],
-        fastest: (tableItems[i]!.parentNode as Element)?.className === 'text-purple',
+        rank: +rowItems[0],
+        date: rowItems[1],
+        name: rowItems[2],
+        car: rowItems[3],
+        time: rowItems[tableSkips - 1],
+        fastest: fastest,
         sourcePage: url,
-        runLink: match ? `https://hub.shutokorevivalproject.com${match[1]}` : 'NOT FOUND',
+        runLink: lapID ? `https://hub.shutokorevivalproject.com/timing/lap?id=${lapID[1]}` : 'NOT FOUND',
         input: undefined,
         tyre: undefined,
         s1: undefined,
@@ -99,18 +107,20 @@ export function parseTimingResponse(
       }
 
       // Add other details if existing
-      if (tableItems[i + 3]) {
-        raceItem.tyre = tableItems[i + 3]
-        raceItem.s1 = tableItems[i + 4].slice(1)
-        raceItem.s2 = tableItems[i + 5].slice(1)
+      if (rowItems[5]) {
+        raceItem.tyre = rowItems[5]
+        raceItem.s1 = rowItems[6].slice(1)
+        raceItem.s2 = rowItems[7].slice(1)
       }
-      if (s3Available) { raceItem.s3 = tableItems[i + 6].slice(1)}
-      if (s4Available) { raceItem.s4 = tableItems[i + 7].slice(1)}
-      if (tableItems[i + 2]) { raceItem.input = tableItems[i + 2]}
+      if (s3Available) { raceItem.s3 = rowItems[8].slice(1)}
+      if (s4Available) { raceItem.s4 = rowItems[9].slice(1)}
+      if (rowItems[4]) { raceItem.input = rowItems[4]}
 
       // Save
       timingList.push(raceItem)
+
     }
+  
   }
   return timingList
 }
