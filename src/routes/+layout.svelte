@@ -1,3 +1,8 @@
+<script lang='ts'>
+    import Analytics from "$lib/client/analytics.svelte";
+</script>
+
+<Analytics></Analytics>
 <div id="base">
     <slot></slot>
 </div>
