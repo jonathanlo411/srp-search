@@ -90,7 +90,6 @@
       // Submitting Form
       // @ts-ignore
       const endpoint = '/api/search?' + new URLSearchParams(formData)
-      console.log(endpoint)
       const response = await fetch(endpoint, {
         method: 'GET'
       })
