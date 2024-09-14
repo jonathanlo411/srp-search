@@ -90,6 +90,7 @@
       // Submitting Form
       // @ts-ignore
       const endpoint = '/api/search?' + new URLSearchParams(formData)
+      console.log(endpoint)
       const response = await fetch(endpoint, {
         method: 'GET'
       })
@@ -195,7 +196,10 @@
       <div class='side-input-group'>
         <div class='input-group'>
           <span class='input-title'>Car</span>
-          <SimpleSelect className='s-select' name='car' options={selectOptions['srpCars'][(leaderboard === 'TrafficSlow') ? 'slow' : 'fast']} />
+          <SimpleSelect className='s-select' name='car' options={selectOptions['srpCars'][
+            (leaderboard === 'TrafficSlow') ? 'slow' : 
+            (leaderboard === "Clawie's Selection Carpack") ? 'clawies' : 'fast'
+          ]} />
         </div>
         <div class='input-group'>
           <span class='input-title'>Current Month</span>
