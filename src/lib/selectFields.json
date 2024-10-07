@@ -5,6 +5,17 @@
         "TrafficSlow": "TrafficSlow",
         "Clawie's Selection Carpack": "Clawie's Selection Carpack"
     },
+    "pointsLeaderBoardOpts": {
+        "Combine all leaderboards": "",
+        "Default": "Default",
+        "Traffic": "Traffic",
+        "TrafficSlow": "TrafficSlow",
+        "Clawie's Selection Carpack": "Clawie's Selection Carpack"
+    },
+    "overtakeLeaderBoardOpts": {
+        "Default/Traffic": "Default",
+        "TrafficSlow": "TrafficSlow"
+    },
     "srpRoutes": {
         "Bayshore Northbound": "Bayshore Northbound",
         "Bayshore Southbound": "Bayshore Southbound",
@@ -12,6 +23,7 @@
         "Belt Outer": "Belt Outer",
         "C1 Inner": "C1 Inner",
         "C1 Outer": "C1 Outer",
+        "Mirai Inner": "Mirai Inner",
         "Mirai Outer": "Mirai Outer",
         "Shibuya": "Shibuya",
         "Shinjuku": "Shinjuku",
@@ -122,16 +134,5 @@
             "alm_323gtr": "alm_323gtr",
             "anis_spec_fb3s": "anis_spec_fb3s"              
         }
-    },
-    "pointsLeaderBoardOpts": {
-        "Combine all leaderboards": "",
-        "Default": "Default",
-        "Traffic": "Traffic",
-        "TrafficSlow": "TrafficSlow",
-        "Clawie's Selection Carpack": "Clawie's Selection Carpack"
-    },
-    "overtakeLeaderBoardOpts": {
-        "Default/Traffic": "Default",
-        "TrafficSlow": "TrafficSlow"
     }
 }
